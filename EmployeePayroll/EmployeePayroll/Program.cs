@@ -13,8 +13,9 @@ namespace EmployeePayroll
             Console.WriteLine("Sql database connectivity!");
 
             EmployeeRepo repo = new EmployeeRepo();
-            //repo.GetAllEmployee();
-            repo.UpdateEmployeeSalary();
+           repo.GetAllEmployee();
+            //repo.UpdateEmployeeSalary();
+           // repo.GetEmployeeDetailsByDate();
         }
     }
 }
