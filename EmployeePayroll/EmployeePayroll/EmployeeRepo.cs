@@ -44,7 +44,7 @@ namespace EmployeePayroll
                 connection.Close();
             }
         }
-        public int UpdateEmployeeSalary()
+        public int UpdateEmployee()
         {
             EmployeePayroll emp = new EmployeePayroll();
             emp.employeeName = "john";
@@ -146,6 +146,7 @@ namespace EmployeePayroll
                     sqlCommand.Parameters.AddWithValue("@StartDate", startDate);
                     sqlCommand.Parameters.AddWithValue("@EndDate", endDate);
                     SqlDataReader reader = sqlCommand.ExecuteReader();
+
                     //read all rows & display data
                     readDataRows(reader, employee);
                     reader.Close();
