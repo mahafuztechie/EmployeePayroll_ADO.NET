@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EmployeePayroll
 {
-    internal class EmployeeRepo
+    public class EmployeeRepo
     {
         public static string connectionString = @"Data Source=DESKTOP-SBPIUH9;Initial Catalog=Employee_payroll;Integrated Security=True";
         SqlConnection connection = null;
@@ -102,9 +102,9 @@ namespace EmployeePayroll
 
                     int result = sqlCommand.ExecuteNonQuery();
                     if (result == 1)
-                        Console.WriteLine("Salary is updated...");
+                        Console.WriteLine("employee details are updated...");
                     else
-                        Console.WriteLine("Salary not updated!");
+                        Console.WriteLine("details are not updated!");
                     return result;
                 }
             }
@@ -118,49 +118,6 @@ namespace EmployeePayroll
             }
         }
 
-        public bool AddEmployee(EmployeePayroll payroll)
-        {
-            try
-            {
-                using (this.connection)
-                {
-                    SqlCommand command = new SqlCommand("spAddEmployeeDetail", this.connection);
-                    command.CommandType = CommandType.StoredProcedure;
-
-
-                    command.Parameters.AddWithValue("@name", payroll.employeeName);
-                    command.Parameters.AddWithValue("@basic_Pay", payroll.basicPay);
-                    command.Parameters.AddWithValue("@start_date", payroll.startDate);
-                    command.Parameters.AddWithValue("@Gender", payroll.Gender);
-                    command.Parameters.AddWithValue("@phonenumber", payroll.phoneNumber);
-                    command.Parameters.AddWithValue("@address", payroll.address);
-                    command.Parameters.AddWithValue("@department", payroll.department);
-                    command.Parameters.AddWithValue("@Deductions", payroll.deductions);
-                    command.Parameters.AddWithValue("@taxable_pay", payroll.taxablePay);
-                    command.Parameters.AddWithValue("@income_tax", payroll.tax);
-                    command.Parameters.AddWithValue("@net_pay", payroll.netPay);
-
-
-                    connection.Open();
-                    var result = command.ExecuteNonQuery();
-                    connection.Close();
-
-                    if (result != 0)
-                    {
-                        return true;
-                    }
-                    return false;
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                return false;
-            }
-            finally
-            {
-                connection.Close();
-            }
-        }
+        
     }
 }
