@@ -13,7 +13,8 @@ namespace EmployeePayroll
             Console.WriteLine("Sql database connectivity!");
 
             EmployeeRepo repo = new EmployeeRepo();
-            repo.GetAllEmployee();
+            //repo.GetAllEmployee();
+            repo.UpdateEmployeeSalary();
         }
     }
 }
