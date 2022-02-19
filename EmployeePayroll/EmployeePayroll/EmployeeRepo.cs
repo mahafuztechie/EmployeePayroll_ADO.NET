@@ -162,5 +162,55 @@ namespace EmployeePayroll
                 connection.Close();
             }
         }
+
+
+        public void UsingDatabaseFunction()
+        {
+            try
+            {
+                DataBaseFunctions df = new DataBaseFunctions();
+
+                connection = new SqlConnection(connectionString);
+                string queryDb = @"SELECT gender,COUNT(basic_pay) AS TotalCount,SUM(basic_pay) AS TotalSum, 
+                                   AVG(basic_pay) AS AverageValue, 
+                                   MIN(basic_pay) AS MinValue, MAX(basic_pay) AS MaxValue
+                                   FROM payroll 
+                                   WHERE Gender = 'F' GROUP BY Gender;";
+
+                //define SqlCommand Object
+                SqlCommand cmd = new SqlCommand(queryDb, connection);
+                connection.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+
+                if (dr.HasRows)
+                {
+                    while (dr.Read())
+                    {
+                        df.gender = Convert.ToString(dr["Gender"]);
+                        df.count = Convert.ToInt32(dr["TotalCount"]);
+                        df.totalSum = Convert.ToDecimal(dr["TotalSum"]);
+                        df.avg = Convert.ToDecimal(dr["AverageValue"]);
+                        df.min = Convert.ToDecimal(dr["MinValue"]);
+                        df.max = Convert.ToDecimal(dr["MaxValue"]);
+                        Console.WriteLine("Gender: {0}, TotalCount: {1}, TotalSalary: {2}, AvgSalary:  {3}, MinSalary:  {4}, MinSalary:  {5}", df.gender, df.count, df.totalSum, df.avg, df.min, df.max);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Rows doesn't exist!");
+                }
+                dr.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                connection.Close();
+            }
+            finally
+            {
+                connection.Close();
+            }
+            Console.WriteLine();
+        }
     }
 }
