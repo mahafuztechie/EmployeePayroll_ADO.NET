@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EmployeePayroll
 {
-    internal class EmployeePayroll
+    public class EmployeePayroll
     {
          //entity
         public int employeeId { get; set; }

@@ -13,10 +13,15 @@ namespace EmployeePayroll
             Console.WriteLine("Sql database connectivity!");
 
             EmployeeRepo repo = new EmployeeRepo();
-            //repo.GetAllEmployee();
+            //repo.GetAllEmployee(@"SELECT * FROM Payroll;");
             //repo.UpdateEmployee();
             //repo.GetEmployeeDetailsByDate();
-            repo.UsingDatabaseFunction();
+
+            // repo.UsingDatabaseFunction();
+            Payroll payroll = new Payroll();    
+            EmployeePayroll employeePayroll = new EmployeePayroll();    
+            Department department = new Department();   
+            repo.AddEmployeeToPayroll(payroll, employeePayroll, department);
         }
     }
 }

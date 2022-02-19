@@ -13,15 +13,15 @@ namespace EmployeePayroll
         public static string connectionString = @"Data Source=DESKTOP-SBPIUH9;Initial Catalog=Employee_payroll;Integrated Security=True";
         SqlConnection connection = null;
 
-        public void GetAllEmployee()
+        public void GetAllEmployee(string q)
         {
          
             try
             {
-                EmployeePayroll employeePayroll = new EmployeePayroll();
+                Payroll Payroll = new Payroll();
                 using (connection = new SqlConnection(connectionString))
                 {
-                    string query = @"SELECT * FROM emp_payroll;";
+                    string query = q;
 
                     //define SqlCommand Object
                     SqlCommand cmd = new SqlCommand(query, connection);
@@ -29,7 +29,7 @@ namespace EmployeePayroll
                     connection.Open();
                     Console.WriteLine("connected");
                     SqlDataReader dr = cmd.ExecuteReader();
-                    readDataRows(dr, employeePayroll);
+                    readDataRows(dr, Payroll);
                     
                     dr.Close();
                 }
@@ -95,8 +95,6 @@ namespace EmployeePayroll
                 connection.Close();
             }
         }
-
-        //method to read all rows
         static void readDataRows(SqlDataReader dr, EmployeePayroll employeePayroll)
         {
             if (dr.HasRows)
@@ -118,6 +116,33 @@ namespace EmployeePayroll
 
                     //Display retrieved record
                     Console.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10}", employeePayroll.employeeId, employeePayroll.employeeName, employeePayroll.phoneNumber, employeePayroll.address, employeePayroll.department, employeePayroll.Gender, employeePayroll.basicPay, employeePayroll.deductions, employeePayroll.taxablePay, employeePayroll.tax, employeePayroll.netPay);
+                    Console.WriteLine("\n");
+                }
+            }
+            else
+            {
+                Console.WriteLine("No data found!");
+            }
+
+        }
+
+        //method to read all rows
+        static void readDataRows(SqlDataReader dr, Payroll payroll)
+        {
+            if (dr.HasRows)
+            {
+                while (dr.Read())
+                {
+                    payroll.payrollId = dr.GetString(0);
+                    payroll.basicPay = dr.GetDecimal(1);
+                    payroll.deductions = dr.GetDecimal(2);
+                    payroll.taxablePay = dr.GetDecimal(3);
+                    payroll.tax = dr.GetDecimal(4);
+                    payroll.netPay = dr.GetDecimal(5);
+                    payroll.employeeId = dr.GetInt32(6);
+
+                    //Display retrieved record
+                    Console.WriteLine("{0},{1},{2},{3},{4},{5},{6}", payroll.employeeId, payroll.basicPay, payroll.deductions, payroll.taxablePay, payroll.tax, payroll.netPay, payroll.employeeId);
                     Console.WriteLine("\n");
                 }
             }
@@ -164,8 +189,9 @@ namespace EmployeePayroll
         }
 
 
-        public void UsingDatabaseFunction()
+        public void UsingDatabaseFunction(string q)
         {
+            
             try
             {
                 DataBaseFunctions df = new DataBaseFunctions();
@@ -174,8 +200,8 @@ namespace EmployeePayroll
                 string queryDb = @"SELECT gender,COUNT(basic_pay) AS TotalCount,SUM(basic_pay) AS TotalSum, 
                                    AVG(basic_pay) AS AverageValue, 
                                    MIN(basic_pay) AS MinValue, MAX(basic_pay) AS MaxValue
-                                   FROM payroll 
-                                   WHERE Gender = 'F' GROUP BY Gender;";
+                                   FROM emp_payroll 
+                                   WHERE Gender =  GROUP BY Gender;";
 
                 //define SqlCommand Object
                 SqlCommand cmd = new SqlCommand(queryDb, connection);
@@ -211,6 +237,54 @@ namespace EmployeePayroll
                 connection.Close();
             }
             Console.WriteLine();
+        }
+
+
+        public void AddEmployeeToPayroll(Payroll payroll, EmployeePayroll employeePayroll, Department depart)
+        {
+           
+            try
+            {
+                using (connection = new SqlConnection(connectionString))
+                {
+                    SqlCommand command = new SqlCommand("spAddEmpPayrollDetails", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@emp_id", employeePayroll.employeeId = 6);
+                    command.Parameters.AddWithValue("@employee_name", employeePayroll.employeeName = "james");
+                    command.Parameters.AddWithValue("@phone_no", employeePayroll.phoneNumber = "1234560");
+                    command.Parameters.AddWithValue("@address", employeePayroll.address = "up");
+                    command.Parameters.AddWithValue("@gender", employeePayroll.Gender = "M");
+                    command.Parameters.AddWithValue("@payroll_Id", payroll.payrollId = "#2945");
+                    command.Parameters.AddWithValue("@basic_pay", payroll.basicPay = 100000);
+                    command.Parameters.AddWithValue("@deduction", payroll.deductions = 20000);
+                    command.Parameters.AddWithValue("@income_tax", payroll.tax = 5000);
+                    command.Parameters.AddWithValue("@taxable_pay", payroll.taxablePay = 5000);
+                    command.Parameters.AddWithValue("@net_pay", payroll.netPay = 70000);
+                    command.Parameters.AddWithValue("@department_Id", depart.departmentId = 505);
+                    command.Parameters.AddWithValue("@departmentName", depart.departmentName = "Fullstack");
+
+                    connection.Open();
+                    int result = command.ExecuteNonQuery();
+                    if (result != 0)
+                    {
+                        Console.WriteLine("added successfully...");
+
+                    }
+                    else
+                    {
+                        Console.WriteLine("adding data failed...");
+                    }
+                    
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            finally
+            {
+                connection.Close();
+            }
         }
     }
 }

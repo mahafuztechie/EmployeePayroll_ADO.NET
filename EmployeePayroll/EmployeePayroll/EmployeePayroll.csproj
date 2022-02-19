@@ -44,8 +44,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataBaseFunctions.cs" />
+    <Compile Include="Department.cs" />
     <Compile Include="EmployeePayroll.cs" />
     <Compile Include="EmployeeRepo.cs" />
+    <Compile Include="Payroll.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
