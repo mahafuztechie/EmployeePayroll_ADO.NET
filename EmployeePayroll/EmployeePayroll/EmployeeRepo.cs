@@ -286,5 +286,36 @@ namespace EmployeePayroll
                 connection.Close();
             }
         }
+
+
+        public void DeleteFeomAllATables(string q)
+        {
+
+            try
+            {
+                Payroll Payroll = new Payroll();
+                using (connection = new SqlConnection(connectionString))
+                {
+                    string query = q;
+
+                    //define SqlCommand Object
+                    SqlCommand cmd = new SqlCommand(query, connection);
+                    //establish connection
+                    connection.Open();
+                    Console.WriteLine("connected");
+                    cmd.ExecuteReader();
+                    Console.WriteLine("deleted payroll successfully");
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            finally
+            {
+                //close connection
+                connection.Close();
+            }
+        }
     }
 }

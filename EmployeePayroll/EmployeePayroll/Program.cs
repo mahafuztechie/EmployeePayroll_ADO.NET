@@ -21,7 +21,9 @@ namespace EmployeePayroll
             Payroll payroll = new Payroll();    
             EmployeePayroll employeePayroll = new EmployeePayroll();    
             Department department = new Department();   
-            repo.AddEmployeeToPayroll(payroll, employeePayroll, department);
+            //repo.AddEmployeeToPayroll(payroll, employeePayroll, department);
+            string deleteQuery = "delete from Payroll where employee_id=6;"+"delete from Department where employee_id = 6;"+"delete from Employee where employee_id = 6;";
+            repo.DeleteFeomAllATables(deleteQuery);
         }
     }
 }
